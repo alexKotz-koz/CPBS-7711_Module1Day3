@@ -2,7 +2,7 @@ def fanconi_anemia_genes(inputFile):
     anemiaData = []
     anemiaGenes = []
 
-    #Open input file and add contents to a list (anemiaData)
+    #Open input file and add contents to a row (anemiaData)
     with open(inputFile, 'r') as file:
         for row in file:
             anemiaData.append(row.split('\t'))
@@ -18,7 +18,7 @@ def fanconi_anemia_genes(inputFile):
         anemiaData[itr].pop(0)
         anemiaData[itr].pop(0)
 
-    #Add each gene from anemiaData to a single list (anemiaGenes)
+    #Add each gene from anemiaData to a single row (anemiaGenes)
     for row in anemiaData:
         for item in row:
             anemiaGenes.append(item)
@@ -34,7 +34,7 @@ def create_subnetwork(inputFile, anemiaGenes):
 
     #1)Open STRING 1 file, iterate thru each row in file
     #2)Cross check the genes in each row with the genes in anemiaGenes
-    #3)If both genes are in the anemiaGenes list add to results list
+    #3)If both genes are in the anemiaGenes row add to results row
 
     with open(inputFile, 'r') as file:
         results = []
@@ -60,6 +60,38 @@ def create_subnetwork(inputFile, anemiaGenes):
     outputFile.close()
 
 
+def check_duplicate(resultsFile):
+    #using set's, as the functionality is related to uniqueness
+    results = set() 
+    seen = set()
+    duplicates = set()
+
+    with open(resultsFile, 'r') as file:
+        for row in file:
+            row = row.split('\t')
+            row_key = tuple(sorted(row)) #sort each row alphabetically and store as tuple
+            print(row_key)
+
+            if row_key in seen:
+                duplicates.add(row_key)
+            else:
+                seen.add(row_key)
+                results.add(tuple(row))
+
+    with open('results.txt','w') as outputFile:
+        for row in results:
+            outputFile.write('\t'.join(row))
+    outputFile.close()
+
+    '''for result in results:
+        print("Unique:", result)'''
+'''    for dup in duplicates:
+            print("Duplicate:", dup)'''
+    #print("Total unique:", len(results))
+                
+        
+
+
 def test(resultsFile, anemiaGenes):
     with open(resultsFile, 'r') as f:
         for line in f:
@@ -71,12 +103,13 @@ def test(resultsFile, anemiaGenes):
 
 
 def main():
+    #anemiaGenes = fanconi_anemia_genes("Input.gmt.txt")
 
-    anemiaGenes = fanconi_anemia_genes("Input.gmt.txt")
-
-    create_subnetwork("STRING 1.txt", anemiaGenes=anemiaGenes)
+    #create_subnetwork("STRING 1.txt", anemiaGenes=anemiaGenes)
     
-    test("results.txt", anemiaGenes=anemiaGenes)
+    check_duplicate("results.txt")
+
+    #test("results.txt", anemiaGenes=anemiaGenes)
 
 
 if __name__ == "__main__":
