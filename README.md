@@ -21,7 +21,7 @@
 
 ### Setup and Configuration:
 
-- Download and extract zip folder containing the two source text files and main.py, into a known directory on the host machine.
+- Clone the repository into a known directory on the host machine.
 
 <hr>
 
@@ -31,7 +31,7 @@
 
     **Note**: If using a conda environment, please activate the conda environment prior to running the main.py file.
 
-2. Navigate to the directory in which the project was extracted.
+2. Navigate to the directory in which the project was cloned.
 
     Example: 
         
