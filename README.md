@@ -1,7 +1,7 @@
 
 # README
 
-## REPORT: [Link to Report]()
+## REPORT: [Link to Report](https://docs.google.com/document/d/1WyCkMw5yXGx-AHQtY2_fggWxE8zY7hX2IQHKobqR0ds/edit)
 
 ### Installation Requirements:
 - Python version 3.11
@@ -13,11 +13,11 @@
 
 ### Files in Module1Day3 directory:
 
-**Input.gmt.txt**: A list of the 12 known genes associated with Fanconi Anemia with their corresponding loci.
+- **Input.gmt.txt**: A list of the 12 known genes associated with Fanconi Anemia with their corresponding loci.
 
-**STRING 1.txt**: A network of connected genes and thier edge weight.
+- **STRING 1.txt**: A network of connected genes and their edge weight.
 
-**main.py**: A Python script that generates a sub-network of genes from the Input.gmt.txt file with their corresponding edge weight (derived from the network in STRING 1.txt)
+- **main.py**: A Python script that generates a sub-network of genes from the Input.gmt.txt file with their corresponding edge weight (derived from the network in STRING 1.txt)
 
 ### Setup and Configuration:
 
