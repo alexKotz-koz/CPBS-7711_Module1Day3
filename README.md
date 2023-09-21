@@ -1,7 +1,7 @@
 
 # README
 
-## REPORT: [Link to Report](https://docs.google.com/document/d/1WyCkMw5yXGx-AHQtY2_fggWxE8zY7hX2IQHKobqR0ds/edit)
+## Report: [Link to Report](https://docs.google.com/document/d/1WyCkMw5yXGx-AHQtY2_fggWxE8zY7hX2IQHKobqR0ds/edit)
 
 ### Installation Requirements:
 - Python version 3.11
