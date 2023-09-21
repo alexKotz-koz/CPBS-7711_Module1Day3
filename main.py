@@ -1,55 +1,52 @@
+##PRE: Input.gmt.txt: contains the FA associated genes in an unstructured format
+##POST: structured list of FA associated genes
 def fanconi_anemia_genes(inputFile):
-    anemiaData = []
-    anemiaGenes = []
+    #using lists for the original data, as we need to manipulate the content in the lists
+    faData = []
+    faGenes = []
 
-    #Open input file and add contents to a row (anemiaData)
+    #open input file and add contents to a row (faData)
     with open(inputFile, 'r') as file:
         for row in file:
-            anemiaData.append(row.split('\t'))
+            faData.append(row.split('\t'))
     file.close()
 
-    #Iterate thru anemiaData and remove newline character from last item in each row
-    for itr in range(len(anemiaData)):
-        if '\n' in anemiaData[itr][-1]:
-            anemiaData[itr][-1] = anemiaData[itr][-1].strip()
+    #iterate thru faData and remove newline character from last item in each row
+    for itr in range(len(faData)):
+        if '\n' in faData[itr][-1]:
+            faData[itr][-1] = faData[itr][-1].strip()
 
-    #Remove the first two items in each row of anemiaData to isolate the genes
-    for itr in range(len(anemiaData)):
-        anemiaData[itr].pop(0)
-        anemiaData[itr].pop(0)
+    #remove the first two items in each row of faData to isolate the genes
+    for itr in range(len(faData)):
+        faData[itr].pop(0)
+        faData[itr].pop(0)
 
-    #Add each gene from anemiaData to a single row (anemiaGenes)
-    for row in anemiaData:
+    #add each gene from faData to a single list (faGenes)
+    for row in faData:
         for item in row:
-            anemiaGenes.append(item)
+            faGenes.append(item)
     
-    #NOTE: could try to implement a check for duplicate genes in anemiaGenes to conserve space
+    return faGenes
 
-    return anemiaGenes
+##PRE: STRING 1.txt: contains network of gene to gene mapping with edge weight
+##POST: subnetwork that contains all FA associated genes, connected using the edge weight (from STRING 1.txt) and gene to gene mapping from faData
+def create_subnetwork(inputFile, faGenes):
 
-
-def create_subnetwork(inputFile, anemiaGenes):
-
-    #Create sub-network with FA related genes, using STRING 1.txt
-
-    #1)Open STRING 1 file, iterate thru each row in file
-    #2)Cross check the genes in each row with the genes in anemiaGenes
-    #3)If both genes are in the anemiaGenes row add to results row
-
+    #open STRING 1 file, iterate thru each row in file
     with open(inputFile, 'r') as file:
         results = []
 
         for row in file:
             row = row.split('\t')
 
-            #Error check format of STRING 1.txt
+            #error check format of STRING 1.txt
             if len(row) != 3:
                 print('Data format not consistent with STRING format')
                 break
             
-            #2 & 3 from comment above
-            if row[0] in anemiaGenes: 
-                if row[1] in anemiaGenes:
+            #cross check the genes in each row with the genes in faGenes. if both genes are in the faGenes list, add to results.
+            if row[0] in faGenes: 
+                if row[1] in faGenes:
                     results.append(row)
 
     file.close()
@@ -59,9 +56,10 @@ def create_subnetwork(inputFile, anemiaGenes):
             outputFile.write('\t'.join(row))
     outputFile.close()
 
-
+##PRE: subnetwork, generated from create_subnetwork()
+##POST: subnetwork that only contains unique rows. ***this functionality is to remove the duplicated edge connection between any given node-node pair.
 def check_duplicate(resultsFile):
-    #using set's, as the functionality is related to uniqueness
+    #using set's, as this functionality is related to uniqueness and speed is crucial for effecient completion of the script. 
     results = set() 
     seen = set()
     duplicates = set()
@@ -69,47 +67,37 @@ def check_duplicate(resultsFile):
     with open(resultsFile, 'r') as file:
         for row in file:
             row = row.split('\t')
-            row_key = tuple(sorted(row)) #sort each row alphabetically and store as tuple
-            print(row_key)
-
-            if row_key in seen:
-                duplicates.add(row_key)
+            #sort each row alphabetically and store as tuple to make membership testing more efficent.
+            orderedRow = tuple(sorted(row)) 
+            
+            #if the row from the results file has already 'seen', indicating the contents of the row [gene1, gene2, edge] are identical to another row (order non-specific), add to dummy set.abs
+            #else add to seen and final results set
+            if orderedRow in seen:
+                duplicates.add(tuple(orderedRow))
             else:
-                seen.add(row_key)
+                seen.add(orderedRow)
                 results.add(tuple(row))
 
+    file.close()
+
+    #write unique rows to final subnetwork
     with open('results.txt','w') as outputFile:
-        for row in results:
+        for row in results:     
             outputFile.write('\t'.join(row))
     outputFile.close()
-
-    '''for result in results:
-        print("Unique:", result)'''
-'''    for dup in duplicates:
-            print("Duplicate:", dup)'''
-    #print("Total unique:", len(results))
-                
-        
+       
 
 
-def test(resultsFile, anemiaGenes):
-    with open(resultsFile, 'r') as f:
-        for line in f:
-            line = line.split('\t')
-            if line[0] not in anemiaGenes:
-                print("0" + str(line))
-            if line[1] not in anemiaGenes:
-                print(line[1])
 
 
 def main():
-    #anemiaGenes = fanconi_anemia_genes("Input.gmt.txt")
+    faGenes = fanconi_anemia_genes("Input.gmt.txt")
 
-    #create_subnetwork("STRING 1.txt", anemiaGenes=anemiaGenes)
+    create_subnetwork("STRING 1.txt", faGenes=faGenes)
     
+    #comment check_duplicate call below, to generate subnetwork that contains double edge connections between any given gene-gene relationship
     check_duplicate("results.txt")
-
-    #test("results.txt", anemiaGenes=anemiaGenes)
+    
 
 
 if __name__ == "__main__":

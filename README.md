@@ -27,7 +27,7 @@
 
 1. Open an instance of the terminal.
 
-**Note**: If using a conda environment, please activate the conda environment prior to running the main.py file.
+    **Note**: If using a conda environment, please activate the conda environment prior to running the main.py file.
 
 2. Navigate to the directory in which the project was extracted to.
 
@@ -42,6 +42,7 @@
     Example:
 
         python3 main.py
+**Note**: This program should take < 1 minute to run, without any changes to the main.py file.
 
 <hr>
 
