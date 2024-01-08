@@ -1,6 +1,10 @@
 
 # README
 
+## Introduction: This repository and the proceeding repositories are based on the methods developed in the following study. Modules 1-3 are components of the method described in the study. Module 4 is a rough implementation of the whole method. 
+
+Taşan, M., Musso, G., Hao, T., Vidal, M., MacRae, C. A., & Roth, F. P. (2015). Selecting causal genes from genome-wide association studies via functionally coherent subnetworks. Nature methods, 12(2), 154–159. https://doi.org/10.1038/nmeth.3215
+
 ## Report: [Link to Report](https://docs.google.com/document/d/1WyCkMw5yXGx-AHQtY2_fggWxE8zY7hX2IQHKobqR0ds/edit)
 
 ### Installation Requirements:
